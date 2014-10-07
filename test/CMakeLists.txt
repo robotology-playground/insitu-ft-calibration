@@ -1,7 +1,9 @@
 set(proj_source_path ../src/${CamelCaseName}/)
 include_directories(${proj_source_path} ${CMAKE_CURRENT_BINARY_DIR}/${proj_source_path})
 
-file(GLOB REGR_TESTS "*.cpp")
+set(REGR_TESTS
+    dataset_UNIT.cpp
+    offset_estimator_UNIT.cpp)
 foreach(TEST_PROG ${REGR_TESTS})
     
     get_filename_component(TEST_ROOT ${TEST_PROG} NAME_WE)

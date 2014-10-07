@@ -27,7 +27,7 @@ int main()
     {
         Eigen::Vector3d acc, acc2;
         acc << 1,2,3;
-        Eigen::Vector6d ft, ft2;
+        Eigen::Matrix<double,6,1> ft, ft2;
         ft << 1,2,3, 1,2,3;
         
         custom_assert_true(dataset.getNrOfSamples() == i,"Testing size of dataset before adding sample");

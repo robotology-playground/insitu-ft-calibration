@@ -8,6 +8,7 @@ clone_folder: c:\dev\insitu-ft-calibration
 
 environment:
   EIGEN3_ROOT: c:\dev\eigen-eigen-6b38706d90a9
+  YCM_DIR: c:\dev\ycm\install
   
 install:
   # Install 7zip using Chocolatey
@@ -18,7 +19,7 @@ install:
   - cd ycm
   - md build
   - cd build
-  - cmake -G"Visual Studio 11" .. 
+  - cmake -G"Visual Studio 11" -DCMAKE_INSTALL_PREFIX:PATH=c:\dev\ycm\install  .. 
   - msbuild /m /p:Configuration=Release /p:Platform="Win32" YCM.sln
   - cmake --build C:\dev\ycm\build --target INSTALL
   - cd ..

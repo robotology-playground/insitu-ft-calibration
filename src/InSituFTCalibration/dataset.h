@@ -8,6 +8,11 @@
 
 #include "insitu-ft-calibration-export.h"
 
+#ifdef _MSC_VER
+template class INSITU_FT_CALIBRATION_EXPORT Eigen::Matrix<double,6,1>;
+template class INSITU_FT_CALIBRATION_EXPORT Eigen::Matrix<double,3,1>;
+#endif
+
 namespace Eigen {
     typedef Matrix<double,6,1> Vector6d;
 }

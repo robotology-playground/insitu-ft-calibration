@@ -1,0 +1,29 @@
+version: 1.0.{build}
+
+branches:
+  only:
+  - master
+
+clone_folder: c:\dev\insitu-ft-calibration
+  
+install:
+  - cd c:\dev
+  - ps: Start-FileDownload 'https://github.com/robotology/ycm/releases/download/v0.1.0/YCM-0.1.0-win32.msi'
+  
+  - cmd: c:\dev\YCM-0.1.0-win32.msi 
+
+build:
+
+build_script:
+  - cd c:\dev\insitu-ft-calibration
+  - md build
+  - cd build
+  - cmake -DCREATE_TESTS:BOOL=ON -DCMAKE_CXX_FLAGS:STRING="/W4" -G"Visual Studio 11" ..
+  - msbuild /m /p:Configuration=Release /p:Platform="Win32" InSituFTCalibration.sln
+
+after_build:
+  - cmd: cmake --build C:\dev\insitu-ft-calibration\build --target INSTALL
+  
+test_script:
+  - cmd: ctest -C Release -VV
+  - cmd: ctest -C Debug -VV

@@ -5,12 +5,28 @@ branches:
   - master
 
 clone_folder: c:\dev\insitu-ft-calibration
+
+environment:
+  EIGEN3_ROOT: c:\dev\eigen-eigen-6b38706d90a9
+  YCM_DIR: c:\dev\ycm\install
   
 install:
+  # Install 7zip using Chocolatey
+  - cmd: cinst 7zip.commandline -x86
   - cd c:\dev
-  - ps: Start-FileDownload 'https://github.com/robotology/ycm/releases/download/v0.1.0/YCM-0.1.0-win32.msi'
-  
-  - cmd: c:\dev\YCM-0.1.0-win32.msi 
+  # Download and install YCM
+  - git clone https://github.com/robotology/ycm.git
+  - cd ycm
+  - md build
+  - cd build
+  - cmake -G"Visual Studio 11" -DCMAKE_INSTALL_PREFIX:PATH=c:\dev\ycm\install  .. 
+  - msbuild /m /p:Configuration=Release /p:Platform="Win32" YCM.sln
+  - cmake --build C:\dev\ycm\build --target INSTALL
+  - cd ..
+  - cd ..
+  # Download and install Eigen
+  - ps: Start-FileDownload 'http://bitbucket.org/eigen/eigen/get/3.2.1.zip'
+  - cmd: 7z x c:\dev\3.2.1.zip -oc:\dev -y > nul
 
 build:
 

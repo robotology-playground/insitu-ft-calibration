@@ -21,8 +21,8 @@ namespace InSituFTCalibration {
  */ 
 struct INSITU_FT_CALIBRATION_EXPORT ForceTorqueAccelerometerMeasurement
 {
-    Eigen::Vector6d ft_measure;
-    Eigen::Vector3d acc_measure;
+    INSITU_FT_CALIBRATION_EXPORT Eigen::Vector6d ft_measure;
+    INSITU_FT_CALIBRATION_EXPORT Eigen::Vector3d acc_measure;
 };
 
 /**

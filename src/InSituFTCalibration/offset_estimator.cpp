@@ -42,17 +42,17 @@ bool ForceTorqueOffsetEstimator::computeOffsetEstimation()
     }
     
     //Compute the mean of the ft measurements (\f[ r_m \f])
-    Eigen::Vector6d r_m;
+    Eigen::Matrix<double,6,1> r_m;
     r_m.setZero();
     
     for(int i=0; i < this->getNrOfSamples(); i++)
     {
-        Eigen::Vector6d ft_sample;
+        Eigen::Matrix<double,6,1> ft_sample;
         Eigen::Vector3d acc_sample;
         
         this->getMeasurements(i,ft_sample,acc_sample); 
              
-        Eigen::Vector6d delta = ft_sample - r_m;
+        Eigen::Matrix<double,6,1> delta = ft_sample - r_m;
         r_m += delta/(i+1);
 
     }
@@ -65,12 +65,12 @@ bool ForceTorqueOffsetEstimator::computeOffsetEstimation()
     
     for(int i=0; i < this->getNrOfSamples(); i++)
     {
-        Eigen::Vector6d ft_sample;
+        Eigen::Matrix<double,6,1> ft_sample;
         Eigen::Vector3d acc_sample;
         
         this->getMeasurements(i,ft_sample,acc_sample);
         
-        Eigen::Vector6d ft_sample_without_mean = ft_sample-r_m;
+        Eigen::Matrix<double,6,1> ft_sample_without_mean = ft_sample-r_m;
         RTR += (ft_sample_without_mean)*(ft_sample_without_mean).transpose();   
     }
     
@@ -91,7 +91,7 @@ bool ForceTorqueOffsetEstimator::computeOffsetEstimation()
     
     for(int i=0; i < this->getNrOfSamples(); i++)
     {
-        Eigen::Vector6d ft_sample;
+        Eigen::Matrix<double,6,1> ft_sample;
         Eigen::Vector3d acc_sample;
         this->getMeasurements(i,ft_sample,acc_sample);
 
@@ -119,7 +119,7 @@ bool ForceTorqueOffsetEstimator::computeOffsetEstimation()
      return true;
 }
 
-Eigen::Vector6d ForceTorqueOffsetEstimator::getOffset() const
+Eigen::Matrix<double,6,1> ForceTorqueOffsetEstimator::getOffset() const
 {
     return this->offset;
 }

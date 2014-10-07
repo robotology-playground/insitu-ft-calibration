@@ -25,7 +25,7 @@ int ForceTorqueAccelerometerDataset::getNrOfSamples() const
 }  
 
 
-bool ForceTorqueAccelerometerDataset::addMeasurements(const Eigen::Vector6d & _ft_measure,
+bool ForceTorqueAccelerometerDataset::addMeasurements(const Eigen::Matrix<double,6,1> & _ft_measure,
                                                      const Eigen::Vector3d & _acc_measure)
 {
     ForceTorqueAccelerometerMeasurement sample;
@@ -38,7 +38,7 @@ bool ForceTorqueAccelerometerDataset::addMeasurements(const Eigen::Vector6d & _f
 }
 
 bool ForceTorqueAccelerometerDataset::getMeasurements(const int sample,
-                     Eigen::Vector6d & ft_measure,
+                     Eigen::Matrix<double,6,1> & ft_measure,
                      Eigen::Vector3d & acc_measure)
 {
     if( !(sample >= 0 && sample < this->getNrOfSamples()) )

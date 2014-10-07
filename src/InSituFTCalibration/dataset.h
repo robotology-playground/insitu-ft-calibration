@@ -3,17 +3,16 @@
 
 #include <vector>
 
+#define EIGEN_NO_STATIC_ASSERT
 #include <Eigen/Dense>
 
 
 #include "insitu-ft-calibration-export.h"
 
-namespace Eigen {
-    typedef Matrix<double,6,1> Vector6d;
-}
-
 namespace InSituFTCalibration {
     
+template class INSITU_FT_CALIBRATION_EXPORT Eigen::Matrix<double,6,1>;
+template class INSITU_FT_CALIBRATION_EXPORT Eigen::Matrix<double,3,1>;
 
 /**
  * Structure representing a joint ft 
@@ -21,7 +20,7 @@ namespace InSituFTCalibration {
  */ 
 struct INSITU_FT_CALIBRATION_EXPORT ForceTorqueAccelerometerMeasurement
 {
-    Eigen::Vector6d ft_measure;
+    Eigen::Matrix<double,6,1> ft_measure;
     Eigen::Vector3d acc_measure;
 };
 
@@ -37,6 +36,7 @@ struct INSITU_FT_CALIBRATION_EXPORT ForceTorqueAccelerometerMeasurement
  */
 class INSITU_FT_CALIBRATION_EXPORT ForceTorqueAccelerometerDataset
 {
+private:
     std::vector<ForceTorqueAccelerometerMeasurement> samples; //< storage of the time series of measurements of the dataset
     
 public:
@@ -58,7 +58,7 @@ public:
     /**
      * Add a sample of FT/accelerometer measurements. 
      */
-    virtual bool addMeasurements(const Eigen::Vector6d & ft_measure,
+    virtual bool addMeasurements(const Eigen::Matrix<double,6,1> & ft_measure,
                                  const Eigen::Vector3d & acc_measure);
     
     /**
@@ -67,7 +67,7 @@ public:
      * @return true if the sample was available, false otherwise
      */
     virtual bool getMeasurements(const int sample,
-                                 Eigen::Vector6d & ft_measure,
+                                 Eigen::Matrix<double,6,1> & ft_measure,
                                  Eigen::Vector3d & acc_measure);
     
     

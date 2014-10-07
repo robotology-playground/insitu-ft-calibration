@@ -3,6 +3,7 @@
 
 #include <vector>
 
+#define EIGEN_NO_STATIC_ASSERT
 #include <Eigen/Dense>
 
 #include "insitu-ft-calibration-export.h"

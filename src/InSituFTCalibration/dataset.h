@@ -9,11 +9,11 @@
 
 #include "insitu-ft-calibration-export.h"
 
-namespace InSituFTCalibration {
-    
 template class INSITU_FT_CALIBRATION_EXPORT Eigen::Matrix<double,6,1>;
 template class INSITU_FT_CALIBRATION_EXPORT Eigen::Matrix<double,3,1>;
 
+namespace InSituFTCalibration {
+    
 /**
  * Structure representing a joint ft 
  * and accelerometer measurement.

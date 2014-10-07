@@ -14,8 +14,13 @@ install:
   - cmd: cinst 7zip.commandline -x86
   - cd c:\dev
   # Download and install YCM
-  - ps: Start-FileDownload 'https://github.com/robotology/ycm/releases/download/v0.1.0/YCM-0.1.0-win32.msi'
-  - cmd: c:\dev\YCM-0.1.0-win32.msi 
+  - git clone https://github.com/robotology/ycm.git
+  - cd ycm
+  - md build
+  - cd build
+  - cmake -G"Visual Studio 11" .. 
+  - msbuild /m /p:Configuration=Release /p:Platform="Win32" YCM.sln
+  - cmake --build C:\dev\ycm\build --target INSTALL
   # Download and install Eigen
   - ps: Start-FileDownload 'http://bitbucket.org/eigen/eigen/get/3.2.1.zip'
   - cmd: 7z x c:\dev\3.2.1.zip -oc:\dev -y > nul

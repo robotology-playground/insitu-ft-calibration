@@ -21,6 +21,8 @@ install:
   - cmake -G"Visual Studio 11" .. 
   - msbuild /m /p:Configuration=Release /p:Platform="Win32" YCM.sln
   - cmake --build C:\dev\ycm\build --target INSTALL
+  - cd ..
+  - cd ..
   # Download and install Eigen
   - ps: Start-FileDownload 'http://bitbucket.org/eigen/eigen/get/3.2.1.zip'
   - cmd: 7z x c:\dev\3.2.1.zip -oc:\dev -y > nul

@@ -1,12 +1,9 @@
 #ifndef INSITU_OFFSET_ESTIMATOR_H
 #define INSITU_OFFSET_ESTIMATOR_H
 
-#include <vector>
-
-#define EIGEN_NO_STATIC_ASSERT
-#include <Eigen/Dense>
-
 #include "insitu-ft-calibration-export.h"
+
+#include "wrappers.h"
 
 #include "dataset.h"
 
@@ -15,7 +12,7 @@ namespace InSituFTCalibration {
 
 /**
  * \class InSituFTCalibration::OffsetEstimator
- * \headerfile dataset.h <InSituFTCalibration/dataset.h>
+ * \headerfile dataset.h <InSituFTCalibration/offset_estimator.h>
  *
  * \brief A class for estimating offset in a dataset.
  * 
@@ -24,17 +21,25 @@ namespace InSituFTCalibration {
 class INSITU_FT_CALIBRATION_EXPORT ForceTorqueOffsetEstimator : public ForceTorqueAccelerometerDataset
 {    
 private:
-    Eigen::Matrix<double,6,1>  offset; //< Offset value estimated by the algorithm
+    struct ForceTorqueOffsetEstimatorPrivateAttributes; 
+    ForceTorqueOffsetEstimatorPrivateAttributes * pimpl;
+    
 public:
     /**
      * Constructor
      */
     ForceTorqueOffsetEstimator();
+    
+    ForceTorqueOffsetEstimator(const ForceTorqueOffsetEstimator& other);
 
     /**
      * Destructor
      */
     virtual ~ForceTorqueOffsetEstimator();
+    
+    
+    virtual ForceTorqueOffsetEstimator& operator=(const ForceTorqueOffsetEstimator &other);
+
     
     /**
      * Get total number of samples added to this object
@@ -67,8 +72,9 @@ public:
      * 
      * \note this function returns the value stored by the computeOffsetEstimation
      *       method. If necessary this method is called before returning the result.
+     * \param VecWrapper a Vector of six elements, used to return the offset
      */   
-    virtual Eigen::Matrix<double,6,1>  getOffset() const;
+    virtual bool  getEstimatedOffset(VecWrapper & offset) const;
     
     /**
      * As getMeasurements(), but remove the offset estimated from the ft measurement.

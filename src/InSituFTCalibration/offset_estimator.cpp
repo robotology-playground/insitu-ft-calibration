@@ -1,17 +1,47 @@
 #include "offset_estimator.h"
 
-#include <iostream>
+#include <Eigen/Dense>
+
+#include "eigen_wrappers.h"
+
 
 namespace InSituFTCalibration {
+    
+struct ForceTorqueOffsetEstimator::ForceTorqueOffsetEstimatorPrivateAttributes
+{   
+    Eigen::Matrix<double,6,1>  offset; //< Offset value estimated by the algorithm
+};
 
-ForceTorqueOffsetEstimator::ForceTorqueOffsetEstimator()
+
+ForceTorqueOffsetEstimator::ForceTorqueOffsetEstimator(): 
+    pimpl(new ForceTorqueOffsetEstimatorPrivateAttributes)
 {
-
 }
+
+ForceTorqueOffsetEstimator::ForceTorqueOffsetEstimator(const ForceTorqueOffsetEstimator& other)
+    : pimpl(new ForceTorqueOffsetEstimatorPrivateAttributes(*other.pimpl))
+{
+}
+
+/*
+ForceTorqueOffsetEstimator::ForceTorqueOffsetEstimator(ForceTorqueOffsetEstimator&& other) 
+    : pimpl(0)
+{
+    std::swap(pimpl, other.pimpl);
+}*/
+ 
+ForceTorqueOffsetEstimator& ForceTorqueOffsetEstimator::operator=(const ForceTorqueOffsetEstimator &other) {
+    if(this != &other) {
+        *pimpl = *(other.pimpl);
+    }
+    return *this;
+}
+ 
 
 ForceTorqueOffsetEstimator::~ForceTorqueOffsetEstimator()
 {
-
+    delete pimpl;
+    pimpl = 0;
 }
 
 Eigen::Matrix<double,9,1> vec_operator(const Eigen::Matrix3d & mat)
@@ -50,7 +80,7 @@ bool ForceTorqueOffsetEstimator::computeOffsetEstimation()
         Eigen::Matrix<double,6,1> ft_sample;
         Eigen::Vector3d acc_sample;
         
-        this->getMeasurements(i,ft_sample,acc_sample); 
+        this->getMeasurements(i,wrapVec(ft_sample),wrapVec(acc_sample)); 
              
         Eigen::Matrix<double,6,1> delta = ft_sample - r_m;
         r_m += delta/(i+1);
@@ -68,7 +98,7 @@ bool ForceTorqueOffsetEstimator::computeOffsetEstimation()
         Eigen::Matrix<double,6,1> ft_sample;
         Eigen::Vector3d acc_sample;
         
-        this->getMeasurements(i,ft_sample,acc_sample);
+        this->getMeasurements(i,wrapVec(ft_sample),wrapVec(acc_sample));
         
         Eigen::Matrix<double,6,1> ft_sample_without_mean = ft_sample-r_m;
         RTR += (ft_sample_without_mean)*(ft_sample_without_mean).transpose();   
@@ -93,7 +123,7 @@ bool ForceTorqueOffsetEstimator::computeOffsetEstimation()
     {
         Eigen::Matrix<double,6,1> ft_sample;
         Eigen::Vector3d acc_sample;
-        this->getMeasurements(i,ft_sample,acc_sample);
+        this->getMeasurements(i,wrapVec(ft_sample),wrapVec(acc_sample));
 
         Eigen::Matrix<double,3,12> regr_matrix = offset_regressor(acc_sample);
         
@@ -114,14 +144,21 @@ bool ForceTorqueOffsetEstimator::computeOffsetEstimation()
           
      //Get final offset
      //FIXME the paper has a plus in this formula, probably we need to fix it in the paper
-     this->offset = r_m - U1*o_first;
+     this->pimpl->offset = r_m - U1*o_first;
    
      return true;
 }
 
-Eigen::Matrix<double,6,1> ForceTorqueOffsetEstimator::getOffset() const
+bool ForceTorqueOffsetEstimator::getEstimatedOffset(VecWrapper & offset) const
 {
-    return this->offset;
+    if( offset.size != 6 )
+    {
+        return false;
+    }
+    
+    toEigen(offset) = this->pimpl->offset;
+    
+    return true;
 }
 
 }

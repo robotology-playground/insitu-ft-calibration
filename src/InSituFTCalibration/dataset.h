@@ -1,28 +1,13 @@
 #ifndef INSITU_FT_ACC_DATASET_H
 #define INSITU_FT_ACC_DATASET_H
 
-#include <vector>
-
-#define EIGEN_NO_STATIC_ASSERT
-#include <Eigen/Dense>
-
 
 #include "insitu-ft-calibration-export.h"
 
-template class INSITU_FT_CALIBRATION_EXPORT Eigen::Matrix<double,6,1>;
-template class INSITU_FT_CALIBRATION_EXPORT Eigen::Matrix<double,3,1>;
+#include "wrappers.h"
+
 
 namespace InSituFTCalibration {
-    
-/**
- * Structure representing a joint ft 
- * and accelerometer measurement.
- */ 
-struct INSITU_FT_CALIBRATION_EXPORT ForceTorqueAccelerometerMeasurement
-{
-    Eigen::Matrix<double,6,1> ft_measure;
-    Eigen::Vector3d acc_measure;
-};
 
 /**
  * \class InSituFTCalibration::ForceTorqueAccelerometerDataset
@@ -37,7 +22,8 @@ struct INSITU_FT_CALIBRATION_EXPORT ForceTorqueAccelerometerMeasurement
 class INSITU_FT_CALIBRATION_EXPORT ForceTorqueAccelerometerDataset
 {
 private:
-    std::vector<ForceTorqueAccelerometerMeasurement> samples; //< storage of the time series of measurements of the dataset
+    struct ForceTorqueAccelerometerDatasetPrivateAttributes; 
+    ForceTorqueAccelerometerDatasetPrivateAttributes * pimpl;
     
 public:
     /**
@@ -49,6 +35,10 @@ public:
      * Destructory
      */
     virtual ~ForceTorqueAccelerometerDataset();
+    
+    ForceTorqueAccelerometerDataset(const ForceTorqueAccelerometerDataset& other);
+
+    ForceTorqueAccelerometerDataset& operator=(const ForceTorqueAccelerometerDataset &other);
 
     /**
      * Clean the class, deleting all added samples.
@@ -57,18 +47,23 @@ public:
     
     /**
      * Add a sample of FT/accelerometer measurements. 
+     * 
+     * @param ft_measure vector of size 6 of ft_measurements
+     * @param acc_measure vector of size 3 of acc_measure
      */
-    virtual bool addMeasurements(const Eigen::Matrix<double,6,1> & ft_measure,
-                                 const Eigen::Vector3d & acc_measure);
+    virtual bool addMeasurements(const VecWrapper ft_measure,
+                                 const VecWrapper acc_measure);
     
     /**
      * Get a sample of FT/accelerometer measurements.
      * 
+     * @param ft_measure vector of size 6 of ft_measurements
+     * @param acc_measure vector of size 3 of acc_measure
      * @return true if the sample was available, false otherwise
      */
     virtual bool getMeasurements(const int sample,
-                                 Eigen::Matrix<double,6,1> & ft_measure,
-                                 Eigen::Vector3d & acc_measure);
+                                 const VecWrapper ft_measure,
+                                 const VecWrapper acc_measure);
     
     
     /**

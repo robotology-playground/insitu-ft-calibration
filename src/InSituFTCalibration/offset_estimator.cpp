@@ -149,7 +149,7 @@ bool ForceTorqueOffsetEstimator::computeOffsetEstimation()
      return true;
 }
 
-bool ForceTorqueOffsetEstimator::getEstimatedOffset(VecWrapper & offset) const
+bool ForceTorqueOffsetEstimator::getEstimatedOffset(const VecWrapper offset) const
 {
     if( offset.size != 6 )
     {

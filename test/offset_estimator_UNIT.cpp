@@ -1,8 +1,14 @@
 #include  "offset_estimator.h"
 
+#include <Eigen/Dense>
+
 #include <cstdlib>
 #include <cmath>
 #include <iostream>
+
+#include "eigen_wrappers.h"
+
+using namespace InSituFTCalibration;
 
 void custom_assert_true(bool condition, std::string msg)
 {
@@ -71,14 +77,15 @@ int main()
         //std::cout << "[INFO] acc: " << acc.transpose() << std::endl;
         //std::cout << "[INFO] ft:  " << ft.transpose() << std::endl;
         
-        offset_estimator.addMeasurements(ft,acc);
+        offset_estimator.addMeasurements(wrapVec(ft),wrapVec(acc));
     }
     
     custom_assert_true(offset_estimator.getNrOfSamples() == n,"Number of sample in dataset is not consistent");
     
     custom_assert_true(offset_estimator.computeOffsetEstimation(),"Offset computation failed");
     
-    Eigen::Matrix<double,6,1>  estimated_offset = offset_estimator.getOffset();
+    Eigen::Matrix<double,6,1> estimated_offset;
+    custom_assert_true(offset_estimator.getEstimatedOffset(wrapVec(estimated_offset)),"Offset retrieval failed");
     
     std::cout << "[INFO] true offset: " << true_offset.transpose() << std::endl;
     std::cout << "[INFO] estimated offset: " << estimated_offset.transpose() << std::endl;

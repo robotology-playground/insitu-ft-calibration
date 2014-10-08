@@ -1,8 +1,14 @@
 #include  "dataset.h"
 
+#include <Eigen/Dense>
+
 #include <cstdlib>
 #include <cmath>
 #include <iostream>
+
+#include "eigen_wrappers.h"
+
+using namespace InSituFTCalibration;
 
 void custom_assert_true(bool condition, std::string msg)
 {
@@ -12,8 +18,6 @@ void custom_assert_true(bool condition, std::string msg)
         exit(EXIT_FAILURE);
     }
 }
-
-
 
 int main()
 {
@@ -31,11 +35,11 @@ int main()
         ft << 1,2,3, 1,2,3;
         
         custom_assert_true(dataset.getNrOfSamples() == i,"Testing size of dataset before adding sample");
-        dataset.addMeasurements(ft,acc);
+        dataset.addMeasurements(wrapVec(ft),wrapVec(acc));
         custom_assert_true(dataset.getNrOfSamples() == i+1,"Testing size of dataset before adding sample");
 
         
-        dataset.getMeasurements(i,ft2,acc2);
+        dataset.getMeasurements(i,wrapVec(ft2),wrapVec(acc2));
         
         //std::cout << "[INFO] ft inserted:  " << ft.transpose() << std::endl;
         //std::cout << "[INFO] ft retrieved: " << ft2.transpose() << std::endl;

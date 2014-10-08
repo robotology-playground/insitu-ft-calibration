@@ -52,7 +52,12 @@ ForceTorqueAccelerometerDataset& ForceTorqueAccelerometerDataset::operator=(cons
 ForceTorqueAccelerometerDataset::~ForceTorqueAccelerometerDataset()
 {
     delete pimpl;
-    pimpl = 0;
+    this->pimpl = 0;
+}
+
+void ForceTorqueAccelerometerDataset::reset()
+{
+    this->pimpl->samples.resize(0);
 }
 
 int ForceTorqueAccelerometerDataset::getNrOfSamples() const

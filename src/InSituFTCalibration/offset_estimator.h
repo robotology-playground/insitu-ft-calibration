@@ -74,7 +74,7 @@ public:
      *       method. If necessary this method is called before returning the result.
      * \param VecWrapper a Vector of six elements, used to return the offset
      */   
-    virtual bool  getEstimatedOffset(VecWrapper & offset) const;
+    virtual bool  getEstimatedOffset(const VecWrapper offset) const;
     
     /**
      * As getMeasurements(), but remove the offset estimated from the ft measurement.

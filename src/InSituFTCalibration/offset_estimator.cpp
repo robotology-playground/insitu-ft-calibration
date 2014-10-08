@@ -10,6 +10,7 @@ namespace InSituFTCalibration {
 struct ForceTorqueOffsetEstimator::ForceTorqueOffsetEstimatorPrivateAttributes
 {   
     Eigen::Matrix<double,6,1>  offset; //< Offset value estimated by the algorithm
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 

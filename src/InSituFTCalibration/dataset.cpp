@@ -16,6 +16,7 @@ struct ForceTorqueAccelerometerMeasurement
 {
     Eigen::Matrix<double,6,1> ft_measure;
     Eigen::Vector3d acc_measure;
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
     
 struct ForceTorqueAccelerometerDataset::ForceTorqueAccelerometerDatasetPrivateAttributes

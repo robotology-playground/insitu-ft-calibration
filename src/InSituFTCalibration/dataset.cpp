@@ -21,7 +21,7 @@ struct ForceTorqueAccelerometerMeasurement
     
 struct ForceTorqueAccelerometerDataset::ForceTorqueAccelerometerDatasetPrivateAttributes
 {   
-    std::vector<ForceTorqueAccelerometerMeasurement> samples; //< storage of the time series of measurements of the dataset
+    std::vector<ForceTorqueAccelerometerMeasurement,Eigen::aligned_allocator<ForceTorqueAccelerometerMeasurement> > samples; //< storage of the time series of measurements of the dataset
 };
 
 

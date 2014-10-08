@@ -27,6 +27,7 @@ int main()
     
     int n = 10;
     double tol = 1e-5;
+    std::cout << "Dataset initialized " << std::endl;
     for( int i=0; i < n; i++ )
     {
         Eigen::Vector3d acc, acc2;
@@ -35,12 +36,15 @@ int main()
         ft << 1,2,3, 1,2,3;
         
         custom_assert_true(dataset.getNrOfSamples() == i,"Testing size of dataset before adding sample");
+        std::cout << "Adding measurements " << i << std::endl;
         dataset.addMeasurements(wrapVec(ft),wrapVec(acc));
         custom_assert_true(dataset.getNrOfSamples() == i+1,"Testing size of dataset before adding sample");
+        std::cout << "Added measurements " << i << std::endl;
 
-        
+        std::cout << "Getting measurements " << i << std::endl;
         dataset.getMeasurements(i,wrapVec(ft2),wrapVec(acc2));
-        
+        std::cout << "Got measurements " << i << std::endl;
+
         //std::cout << "[INFO] ft inserted:  " << ft.transpose() << std::endl;
         //std::cout << "[INFO] ft retrieved: " << ft2.transpose() << std::endl;
 

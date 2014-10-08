@@ -12,7 +12,7 @@ namespace InSituFTCalibration {
  * Structure representing a joint ft 
  * and accelerometer measurement.
  */ 
-struct INSITU_FT_CALIBRATION_EXPORT ForceTorqueAccelerometerMeasurement
+struct ForceTorqueAccelerometerMeasurement
 {
     Eigen::Matrix<double,6,1> ft_measure;
     Eigen::Vector3d acc_measure;

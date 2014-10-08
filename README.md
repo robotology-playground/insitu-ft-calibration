@@ -2,3 +2,4 @@ insitu-ft-calibration [![Build Status](https://travis-ci.org/robotology-playgrou
 =====================
 
 Library for performing in situ calibration of six-axes Force Torque sensors with an embedded accelerometer. 
+It implements the algorithms presented in http://arxiv.org/abs/1410.0885 .

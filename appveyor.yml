@@ -41,5 +41,5 @@ after_build:
   - cmd: cmake --build C:\dev\insitu-ft-calibration\build --target INSTALL
   
 test_script:
-  - cmd: ctest -C Release -VV
-  - cmd: ctest -C Debug -VV
+  - cmd: ctest -VV -C Release 
+  - cmd: ctest -VV -C Debug

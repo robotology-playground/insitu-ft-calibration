@@ -147,8 +147,6 @@ bool ForceTorqueOffsetEstimator::computeOffsetEstimation()
      Eigen::Vector3d o_first = x.segment<3>(9);
 
      //Get final offset
-     //FIXME the paper has a plus in this formula, probably we need to fix it in the paper
-     std::cout << "r_m : " << r_m.transpose() << std::endl;
      this->ftoe_pimpl->offset = r_m + U1*o_first;
 
      return true;

@@ -48,9 +48,9 @@ Eigen::Matrix<double,6,3> GravityRegressor(double mass, Eigen::Vector3d com)
 int main()
 {
     InSituFTCalibration::ForceTorqueOffsetEstimator offset_estimator;
-    
+
     custom_assert_true(offset_estimator.getNrOfSamples() == 0,"Sample in a new dataset are different from zero");
-    
+
     double tol = 1e-6;
     int n = 300;
     double g = 9.8;
@@ -58,47 +58,47 @@ int main()
     Eigen::Vector3d com;
     com << 1.0, -2.0, 3.0;
     //com.setZero();
-    
+
     Eigen::Matrix<double,6,1>  true_offset;
-    true_offset << 1.0, -2.0, 3.0, -4.0, 5.0, -6.0;
+    true_offset << 10000.0, 10000.0, 10000.0, 10000.0, 10000.0, 10000.0;
     //true_offset.setZero();
-    
-    
+
+
     for( int i=0; i < n; i++ )
     {
         //Create random gravity vector
         Eigen::Vector3d acc = Eigen::Vector3d::Random();
         acc *= g/acc.norm();
-        
+
         custom_assert_close(acc.norm(),g,tol,"Generated random gravity has not a proper norm");
 
-        Eigen::Matrix<double,6,1>  ft = GravityRegressor(mass,com)*acc + true_offset;
-                
+        Eigen::Matrix<double,6,1>  r = GravityRegressor(mass,com)*acc + true_offset;
+
         //std::cout << "[INFO] acc: " << acc.transpose() << std::endl;
         //std::cout << "[INFO] ft:  " << ft.transpose() << std::endl;
-        
-        offset_estimator.addMeasurements(wrapVec(ft),wrapVec(acc));
+
+        offset_estimator.addMeasurements(wrapVec(r),wrapVec(acc));
     }
-    
+
     custom_assert_true(offset_estimator.getNrOfSamples() == n,"Number of sample in dataset is not consistent");
-    
+
     custom_assert_true(offset_estimator.computeOffsetEstimation(),"Offset computation failed");
-    
+
     Eigen::Matrix<double,6,1> estimated_offset;
     custom_assert_true(offset_estimator.getEstimatedOffset(wrapVec(estimated_offset)),"Offset retrieval failed");
-    
+
     std::cout << "[INFO] true offset: " << true_offset.transpose() << std::endl;
     std::cout << "[INFO] estimated offset: " << estimated_offset.transpose() << std::endl;
     std::cout << "[INFO] true-estimated offset: " << (true_offset-estimated_offset).transpose() << std::endl;
-    
-    
-    for(int j=0; j < 6; j++ ) 
+
+
+    for(int j=0; j < 6; j++ )
     {
         custom_assert_close(true_offset(j),estimated_offset(j),tol,"Different between true offset and estimated offset");
     }
-    
+
     offset_estimator.reset();
-    
+
     custom_assert_true(offset_estimator.getNrOfSamples() == 0,"Number of sample after reset is not consistent");
 
     return EXIT_SUCCESS;

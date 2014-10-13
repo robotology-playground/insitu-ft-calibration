@@ -3,11 +3,15 @@ include(GenerateExportHeader)
 set(${library_target_name}_SRCS
     dataset.cpp
     offset_estimator.cpp
+    calibration_matrix_estimator.cpp
 )
 
 set(${library_target_name}_HDRS
     dataset.h
     offset_estimator.h
+    calibration_matrix_estimator.h
+    wrappers.h
+    eigen_wrappers.h
 )
 
 set(library_export_header_name ${library_target_name}-export.h)

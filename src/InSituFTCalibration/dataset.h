@@ -63,7 +63,7 @@ public:
      */
     virtual bool getMeasurements(const int sample,
                                  const VecWrapper ft_measure,
-                                 const VecWrapper acc_measure);
+                                 const VecWrapper acc_measure) const;
     
     
     /**

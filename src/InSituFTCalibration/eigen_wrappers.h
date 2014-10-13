@@ -32,10 +32,11 @@ inline Eigen::Map<Eigen::MatrixXd> toEigen(const VecWrapper vec_wrapper)
     return Eigen::Map<Eigen::MatrixXd>(vec_wrapper.data,vec_wrapper.size,1);
 }
 
-//Eigen::Map<Eigen::MatrixXd> unwrap(MatWrapper & mat_wrapper)
-//{
-//    return Eigen::Map<Eigen::MatrixXd>(mat_wrapper.data,mat_wrapper.n_rows,mat_wrapper.n_cols);
-//}
+/// FIXME NO CHECK FOR STORAGE ORDER !!!!!
+inline Eigen::Map<Eigen::MatrixXd> toEigen(const MatWrapper mat_wrapper)
+{
+    return Eigen::Map<Eigen::MatrixXd>(mat_wrapper.data,mat_wrapper.rows,mat_wrapper.cols);
+}
 
 }
 

@@ -15,12 +15,14 @@ struct ForceTorqueOffsetEstimator::ForceTorqueOffsetEstimatorPrivateAttributes
 
 
 ForceTorqueOffsetEstimator::ForceTorqueOffsetEstimator(): 
-    pimpl(new ForceTorqueOffsetEstimatorPrivateAttributes)
+    ForceTorqueAccelerometerDataset(),
+    ftoe_pimpl(new ForceTorqueOffsetEstimatorPrivateAttributes)
 {
 }
 
-ForceTorqueOffsetEstimator::ForceTorqueOffsetEstimator(const ForceTorqueOffsetEstimator& other)
-    : pimpl(new ForceTorqueOffsetEstimatorPrivateAttributes(*other.pimpl))
+ForceTorqueOffsetEstimator::ForceTorqueOffsetEstimator(const ForceTorqueOffsetEstimator& other):
+    ForceTorqueAccelerometerDataset(other),
+    ftoe_pimpl(new ForceTorqueOffsetEstimatorPrivateAttributes(*other.ftoe_pimpl))
 {
 }
 
@@ -31,9 +33,10 @@ ForceTorqueOffsetEstimator::ForceTorqueOffsetEstimator(ForceTorqueOffsetEstimato
     std::swap(pimpl, other.pimpl);
 }*/
  
-ForceTorqueOffsetEstimator& ForceTorqueOffsetEstimator::operator=(const ForceTorqueOffsetEstimator &other) {
+ForceTorqueOffsetEstimator& ForceTorqueOffsetEstimator::operator=(const ForceTorqueOffsetEstimator &other)
+{
     if(this != &other) {
-        *pimpl = *(other.pimpl);
+        *ftoe_pimpl = *(other.ftoe_pimpl);
     }
     return *this;
 }
@@ -41,8 +44,8 @@ ForceTorqueOffsetEstimator& ForceTorqueOffsetEstimator::operator=(const ForceTor
 
 ForceTorqueOffsetEstimator::~ForceTorqueOffsetEstimator()
 {
-    delete pimpl;
-    pimpl = 0;
+    delete ftoe_pimpl;
+    ftoe_pimpl = 0;
 }
 
 Eigen::Matrix<double,9,1> vec_operator(const Eigen::Matrix3d & mat)
@@ -145,7 +148,7 @@ bool ForceTorqueOffsetEstimator::computeOffsetEstimation()
           
      //Get final offset
      //FIXME the paper has a plus in this formula, probably we need to fix it in the paper
-     this->pimpl->offset = r_m - U1*o_first;
+     this->ftoe_pimpl->offset = r_m - U1*o_first;
    
      return true;
 }
@@ -157,9 +160,26 @@ bool ForceTorqueOffsetEstimator::getEstimatedOffset(const VecWrapper offset) con
         return false;
     }
     
-    toEigen(offset) = this->pimpl->offset;
+    toEigen(offset) = this->ftoe_pimpl->offset;
     
     return true;
 }
+
+bool ForceTorqueOffsetEstimator::getMeasurementsWithoutFTOffset(const int sample,
+                                                                     const VecWrapper ft_measure,
+                                                                     const VecWrapper acc_measure) const
+{
+    if( !(sample >= 0 && sample < this->getNrOfSamples()) )
+    {
+        return false;
+    }
+    
+    this->getMeasurements(sample,ft_measure,acc_measure);
+    
+    toEigen(ft_measure) = toEigen(ft_measure)-this->ftoe_pimpl->offset;
+
+    return true;
+}
+    
 
 }

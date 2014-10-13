@@ -81,7 +81,7 @@ bool ForceTorqueAccelerometerDataset::addMeasurements(const VecWrapper _ft_measu
 
 bool ForceTorqueAccelerometerDataset::getMeasurements(const int sample,
                                                       const VecWrapper ft_measure,
-                                                      const VecWrapper acc_measure)
+                                                      const VecWrapper acc_measure) const
 {
     if( !(sample >= 0 && sample < this->getNrOfSamples()) )
     {

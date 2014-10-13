@@ -22,7 +22,7 @@ class INSITU_FT_CALIBRATION_EXPORT ForceTorqueOffsetEstimator : public ForceTorq
 {    
 private:
     struct ForceTorqueOffsetEstimatorPrivateAttributes; 
-    ForceTorqueOffsetEstimatorPrivateAttributes * pimpl;
+    ForceTorqueOffsetEstimatorPrivateAttributes * ftoe_pimpl;
     
 public:
     /**
@@ -79,8 +79,9 @@ public:
     /**
      * As getMeasurements(), but remove the offset estimated from the ft measurement.
      */
-    //virtual bool getMeasurementsWithoutFTOffset(Eigen::Matrix<double,6,1>  & ft_measure,
-    //                                            Eigen::Vector3d & acc_measure) const;
+    virtual bool getMeasurementsWithoutFTOffset(const int sample,
+                                                const VecWrapper ft_measure,
+                                                const VecWrapper acc_measure) const;
     
     /**
      * 

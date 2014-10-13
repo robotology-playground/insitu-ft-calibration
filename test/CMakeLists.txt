@@ -3,9 +3,12 @@ include_directories(${proj_source_path} ${CMAKE_CURRENT_BINARY_DIR}/${proj_sourc
 
 set(REGR_TESTS
     dataset_UNIT.cpp
-    offset_estimator_UNIT.cpp)
+    offset_estimator_UNIT.cpp
+    #calibration_matrix_estimator_UNIT.cpp
+    )
+
 foreach(TEST_PROG ${REGR_TESTS})
-    
+
     get_filename_component(TEST_ROOT ${TEST_PROG} NAME_WE)
 
     add_executable(${TEST_ROOT}_test ${TEST_PROG})

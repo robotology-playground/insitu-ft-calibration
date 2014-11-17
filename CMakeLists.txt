@@ -6,7 +6,6 @@ set(library_target_name insitu-ft-calibration)
 
 project(${CamelCaseName} CXX)
 
-
 set(${VARS_PREFIX}_MAJOR_VERSION 0)
 set(${VARS_PREFIX}_MINOR_VERSION 0)
 set(${VARS_PREFIX}_PATCH_VERSION 1)
@@ -27,10 +26,10 @@ install_basic_package_files(${CamelCaseName} VARS_PREFIX ${VARS_PREFIX}
                                              COMPATIBILITY SameMajorVersion
                                              TARGETS_PROPERTY ${VARS_PREFIX}_TARGETS
                                              NO_CHECK_REQUIRED_COMPONENTS_MACRO)
-                                             
+
 include(AddUninstallTarget)
-                  
-# Testing related commands 
+
+# Testing related commands
 option(CREATE_TESTS "Create regression tests using CMake" FALSE)
 if(CREATE_TESTS)
    enable_testing()

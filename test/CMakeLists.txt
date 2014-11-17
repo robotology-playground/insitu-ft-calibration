@@ -4,6 +4,7 @@ include_directories(${proj_source_path} ${CMAKE_CURRENT_BINARY_DIR}/${proj_sourc
 set(REGR_TESTS
     dataset_UNIT.cpp
     offset_estimator_UNIT.cpp
+    force_calibration_matrix_estimator_UNIT.cpp
     #calibration_matrix_estimator_UNIT.cpp
     )
 

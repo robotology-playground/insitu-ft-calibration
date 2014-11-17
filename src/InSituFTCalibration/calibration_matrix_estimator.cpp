@@ -8,7 +8,7 @@
 
 EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Eigen::Vector3d)
 
-namespace InSituFTCalibration 
+namespace InSituFTCalibration
 {
 
 struct CalibrationMatrixEstimator::CalibrationMatrixEstimatorPrivateAttributes
@@ -21,7 +21,7 @@ struct CalibrationMatrixEstimator::CalibrationMatrixEstimatorPrivateAttributes
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
-CalibrationMatrixEstimator::CalibrationMatrixEstimator(): 
+CalibrationMatrixEstimator::CalibrationMatrixEstimator():
     pimpl(new CalibrationMatrixEstimatorPrivateAttributes)
 {
 }
@@ -31,15 +31,15 @@ CalibrationMatrixEstimator::CalibrationMatrixEstimator(const CalibrationMatrixEs
 {
 }
 
- 
+
 CalibrationMatrixEstimator& CalibrationMatrixEstimator::operator=(const CalibrationMatrixEstimator &other) {
-    if(this != &other) 
+    if(this != &other)
     {
         *pimpl = *(other.pimpl);
     }
     return *this;
 }
- 
+
 
 CalibrationMatrixEstimator::~CalibrationMatrixEstimator()
 {
@@ -72,16 +72,16 @@ int CalibrationMatrixEstimator::getNrOfSamples() const
 }
 
 int CalibrationMatrixEstimator::addCalibrationDataset(std::string dataset_name,
-                                                      double added_mass, 
+                                                      double added_mass,
                                                       const VecWrapper _added_com)
 {
     Eigen::Vector3d added_com = toEigen(_added_com);
-    
+
     pimpl->dataset_names.push_back(dataset_name);
     pimpl->added_masses.push_back(added_mass);
     pimpl->added_coms.push_back(added_com);
     pimpl->datasets.push_back(ForceTorqueOffsetEstimator());
-    
+
     return pimpl->dataset_names.size()-1;
 }
 
@@ -113,22 +113,22 @@ bool CalibrationMatrixEstimator::getCalibrationDataset(const int dataset_id,
     {
         return false;
     }
-    
+
     p_dataset = &(pimpl->datasets[dataset_id]);
     added_mass = pimpl->added_masses[dataset_id];
-    toEigen(added_com) = pimpl->added_coms[dataset_id]; 
+    toEigen(added_com) = pimpl->added_coms[dataset_id];
     dataset_name = pimpl->dataset_names[dataset_id];
-    
+
     return true;
 }
 
 bool CalibrationMatrixEstimator::getCalibrationDataset(const std::string & dataset_name,
                                                        ForceTorqueOffsetEstimator *& p_dataset,
                                                        double & added_mass,
-                                                       const VecWrapper added_com,                                                       
+                                                       const VecWrapper added_com,
                                                        int & dataset_id) const
 {
-    for(int dataset=0; dataset < this->getNrOfDatasets(); dataset++ ) 
+    for(int dataset=0; dataset < this->getNrOfDatasets(); dataset++ )
     {
         if( pimpl->dataset_names[dataset] == dataset_name )
         {
@@ -160,13 +160,13 @@ Eigen::Matrix<double,18,4> P_matrix()
     return wrench_regressor;
 }
 
-Eigen::Matrix<double,6,40>  calibration_matrix_regressor(const Eigen::Matrix<double,6,1> & raw_measures, 
+Eigen::Matrix<double,6,40>  calibration_matrix_regressor(const Eigen::Matrix<double,6,1> & raw_measures,
                                                          const Eigen::Vector3d & grav,
                                                          const Eigen::Matrix<double,18,4> & P)
 {
     Eigen::Matrix<double,6,40> regr;
     regr.setZero();
-    for(int i=0; i < 6; i++ ) 
+    for(int i=0; i < 6; i++ )
     {
         regr.block<6,6>(0,6*i) = raw_measures(i)*Eigen::Matrix<double,6,6>::Identity();
     }
@@ -180,15 +180,15 @@ Eigen::Matrix<double,6,40>  calibration_matrix_regressor(const Eigen::Matrix<dou
     return regr;
 }
 
-Eigen::Matrix<double,6,1> getAddedMassesWrench(double mass, 
+Eigen::Matrix<double,6,1> getAddedMassesWrench(double mass,
                                               const Eigen::Vector3d & com,
                                               const Eigen::Vector3d & grav)
 {
     Eigen::Matrix<double,6,1> ret;
-    
+
     ret.segment<3>(0) = mass*grav;
     ret.segment<3>(3) = mass*com.cross(grav);
-    
+
     return ret;
 }
 
@@ -202,8 +202,8 @@ bool CalibrationMatrixEstimator::computeCalibrationMatrixEstimation(std::string 
     ThetaTransposeTheta.setZero();
     x.setZero();
     ThetaTransposeBeta.setZero();
-    
-    for(int dataset=0; dataset < this->getNrOfDatasets(); dataset++ ) 
+
+    for(int dataset=0; dataset < this->getNrOfDatasets(); dataset++ )
     {
         double added_mass;
         Eigen::Vector3d added_com;
@@ -214,41 +214,41 @@ bool CalibrationMatrixEstimator::computeCalibrationMatrixEstimation(std::string 
                                     added_mass,
                                     wrapVec(added_com),
                                     dummy);
-        
+
         p_dataset->computeOffsetEstimation();
-        
-        for(int smpl=0; smpl < p_dataset->getNrOfSamples(); smpl++ ) 
+
+        for(int smpl=0; smpl < p_dataset->getNrOfSamples(); smpl++ )
         {
             Eigen::Matrix<double,6,1> raw;
             Eigen::Vector3d grav;
-        
+
             p_dataset->getMeasurementsWithoutFTOffset(smpl,wrapVec(raw),wrapVec(grav));
-            
+
             Eigen::Matrix<double,6,40> Theta = calibration_matrix_regressor(raw,grav,P);
             Eigen::Matrix<double,6,1> Beta = getAddedMassesWrench(added_mass,added_com,grav);
-            
+
             ThetaTransposeTheta += Theta.transpose()*Theta;
             ThetaTransposeBeta  += Theta.transpose()*Beta;
         }
     }
-    
-    Eigen::JacobiSVD<Eigen::Matrix<double,40,40>, Eigen::HouseholderQRPreconditioner> 
+
+    Eigen::JacobiSVD<Eigen::Matrix<double,40,40>, Eigen::HouseholderQRPreconditioner>
           svd_TTT(ThetaTransposeTheta, Eigen::ComputeFullU | Eigen::ComputeFullV);
-          
+
     x = svd_TTT.solve(ThetaTransposeBeta);
-    
+
     std::cout << "[INFO] svd problems singular value " << svd_TTT.singularValues() << std::endl;
     std::cout << "[INFO] TTT " << std::endl << ThetaTransposeTheta << std::endl;
     std::cout << "[INFO] estimated mass and m*com " << x.segment<4>(36) << std::endl;
-    
-    for(int i=0; i < 6; i++ ) 
+
+    for(int i=0; i < 6; i++ )
     {
-        for(int j=0; j < 6; j++ ) 
+        for(int j=0; j < 6; j++ )
         {
-            this->pimpl->estimated_calibration_matrix(i,j) = x(i*6+j);
+            this->pimpl->estimated_calibration_matrix(i,j) = x(j*6+i);
         }
     }
-    
+
     return true;
 }
 
@@ -260,7 +260,7 @@ bool CalibrationMatrixEstimator::getEstimatedCalibrationMatrix(const MatWrapper 
     {
         return false;
     }
-    
+
     toEigen(_estimated_calibration_matrix) = this->pimpl->estimated_calibration_matrix;
     return true;
 }

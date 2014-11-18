@@ -68,9 +68,9 @@ int main()
     custom_assert_true(calibration_matrix_estimator.getNrOfSamples() == 0,"Sample in a new dataset are different from zero");
 
     double tol = 1e-4;
-    int n = 10;
+    int n = 100;
     double g = 0.098;
-    int n_datasets = 20;
+    int n_datasets = 200;
 
     double unknown_mass = 0.5;
     Eigen::Vector3d unknown_com;

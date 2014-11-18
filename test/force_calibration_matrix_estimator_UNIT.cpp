@@ -68,9 +68,9 @@ int main()
     custom_assert_true(calibration_matrix_estimator.getNrOfSamples() == 0,"Sample in a new dataset are different from zero");
 
     double tol = 1e-4;
-    int n = 100;
+    int n = 1000;
     double g = 0.098;
-    int n_datasets = 200;
+    int n_datasets = 20;
 
     double unknown_mass = 0.5;
     Eigen::Vector3d unknown_com;
@@ -88,8 +88,8 @@ int main()
 
     for(int i=0; i < n_datasets; i++ )
     {
-        masses[i] = i+2;
-        coms[i] << (i+1), (i+1)*(i+1), (i+1)*(i+1)*(i+1);
+        masses[i] = Eigen::Vector3d::Random()[0];
+        coms[i] = Eigen::Vector3d::Random();
         //offsets[i] << i+20, 3-2*i, 3+5*i, 10+6*i, 34-2*i, 10;
         n_samples[i] = n;
     }

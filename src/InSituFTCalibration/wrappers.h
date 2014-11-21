@@ -14,10 +14,16 @@ namespace InSituFTCalibration {
  * to permit a basic form of error checking.
  *
  */
-struct INSITU_FT_CALIBRATION_EXPORT VecWrapper
+class INSITU_FT_CALIBRATION_EXPORT VecWrapper
 {
+public:
     double * data;
     size_t size;
+    VecWrapper() {};
+    VecWrapper(double * _data,
+               size_t   _size):
+               data(_data),
+               size(_size) {};
 };
 
 enum StorageOrder { ROW_MAJOR,
@@ -30,12 +36,22 @@ enum StorageOrder { ROW_MAJOR,
  * first elements of the array is, and some additional information
  * to permit a basic form of error checking and interpretation of the data.
  */
-struct INSITU_FT_CALIBRATION_EXPORT MatWrapper
+class INSITU_FT_CALIBRATION_EXPORT MatWrapper
 {
+public:
     double * data;
     size_t rows;
     size_t cols;
     StorageOrder storage_order;
+    MatWrapper() {};
+    MatWrapper(double * _data,
+               size_t   _rows,
+               size_t   _cols,
+               StorageOrder _storage_order):
+               data(_data),
+               rows(_rows),
+               cols(_cols),
+               storage_order(_storage_order) {};
 };
 
 }

@@ -16,25 +16,7 @@ inline VecWrapper wrapVec(yarp::sig::Vector & vec)
     return ret;
 }
 
-inline MatWrapper wrapMat(yarp::sig::Matrix mat)
-{
-    MatWrapper ret;
-    ret.data = mat.data();
-    ret.rows = mat.rows();
-    ret.cols = mat.cols();
-    ret.storage_order = ROW_MAJOR;
-    return ret;
-}
-
-inline const VecWrapper wrapVec(const yarp::sig::Vector & vec)
-{
-    VecWrapper ret;
-    ret.data = vec.data();
-    ret.size = vec.size();
-    return ret;
-}
-
-inline const MatWrapper wrapMat(const yarp::sig::Matrix mat)
+inline MatWrapper wrapMat(yarp::sig::Matrix & mat)
 {
     MatWrapper ret;
     ret.data = mat.data();

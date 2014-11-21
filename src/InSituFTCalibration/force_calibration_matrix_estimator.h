@@ -37,7 +37,7 @@ public:
     /**
      * Constructor
      */
-    ForceCalibrationMatrixEstimator();
+     ForceCalibrationMatrixEstimator();
 
     /**
      * Copy constructor

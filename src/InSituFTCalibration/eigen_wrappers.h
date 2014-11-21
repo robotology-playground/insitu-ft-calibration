@@ -32,15 +32,15 @@ inline Eigen::Map<Eigen::MatrixXd> toEigen(const VecWrapper vec_wrapper)
     return Eigen::Map<Eigen::MatrixXd>(vec_wrapper.data,vec_wrapper.size,1);
 }
 
-inline Eigen::Map< Eigen::Matrix<double,Dynamic,Dynamic,RowMajor> > toEigenRowMajor(const MatWrapper mat_wrapper)
+inline Eigen::Map< Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor> > toEigenRowMajor(const MatWrapper mat_wrapper)
 {
     assert(mat_wrapper.storage_order == ROW_MAJOR);
-    return Eigen::Map< Eigen::Matrix<double,Dynamic,Dynamic,RowMajor> >(mat_wrapper.data,mat_wrapper.rows,mat_wrapper.cols);
+    return Eigen::Map< Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor> >(mat_wrapper.data,mat_wrapper.rows,mat_wrapper.cols);
 }
 
 inline Eigen::Map< Eigen::MatrixXd > toEigenColMajor(const MatWrapper mat_wrapper)
 {
-    assert(mat_wrapper.storage_order == COL_MAJOR);
+    assert(mat_wrapper.storage_order == COLUMN_MAJOR);
     return Eigen::Map< Eigen::MatrixXd >(mat_wrapper.data,mat_wrapper.rows,mat_wrapper.cols);
 }
 

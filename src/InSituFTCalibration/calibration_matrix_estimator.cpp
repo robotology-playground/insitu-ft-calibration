@@ -261,7 +261,16 @@ bool CalibrationMatrixEstimator::getEstimatedCalibrationMatrix(const MatWrapper 
         return false;
     }
 
-    toEigen(_estimated_calibration_matrix) = this->pimpl->estimated_calibration_matrix;
+
+    if( _estimated_calibration_matrix.storage_order == ROW_MAJOR )
+    {
+        toEigenRowMajor(_estimated_calibration_matrix) = this->pimpl->estimated_calibration_matrix;
+    }
+    else
+    {
+        toEigenColMajor(_estimated_calibration_matrix) = this->pimpl->estimated_calibration_matrix;
+    }
+
     return true;
 }
 

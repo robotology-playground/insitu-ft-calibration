@@ -90,7 +90,7 @@ int main()
     {
         masses[i] = Eigen::Vector3d::Random()[0];
         coms[i] = Eigen::Vector3d::Random();
-        offsets[i] << Eigen::Vector6d::Random();
+        offsets[i] << Eigen::Matrix<double,6,1>::Random();
         n_samples[i] = n;
     }
 

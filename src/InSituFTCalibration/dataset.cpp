@@ -7,25 +7,25 @@
 #include "eigen_wrappers.h"
 
 namespace InSituFTCalibration {
-    
+
 /**
- * Structure representing a joint ft 
+ * Structure representing a joint ft
  * and accelerometer measurement.
- */ 
+ */
 struct ForceTorqueAccelerometerMeasurement
 {
     Eigen::Matrix<double,6,1> ft_measure;
     Eigen::Vector3d acc_measure;
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
-    
+
 struct ForceTorqueAccelerometerDataset::ForceTorqueAccelerometerDatasetPrivateAttributes
-{   
+{
     std::vector<ForceTorqueAccelerometerMeasurement,Eigen::aligned_allocator<ForceTorqueAccelerometerMeasurement> > samples; //< storage of the time series of measurements of the dataset
 };
 
 
-ForceTorqueAccelerometerDataset::ForceTorqueAccelerometerDataset(): 
+ForceTorqueAccelerometerDataset::ForceTorqueAccelerometerDataset():
     pimpl(new ForceTorqueAccelerometerDatasetPrivateAttributes)
 {
 }
@@ -36,19 +36,19 @@ ForceTorqueAccelerometerDataset::ForceTorqueAccelerometerDataset(const ForceTorq
 }
 
 /*
-ForceTorqueAccelerometerDataset::ForceTorqueAccelerometerDataset(ForceTorqueAccelerometerDataset&& other) 
+ForceTorqueAccelerometerDataset::ForceTorqueAccelerometerDataset(ForceTorqueAccelerometerDataset&& other)
     : pimpl(0)
 {
     std::swap(pimpl, other.pimpl);
 }*/
- 
+
 ForceTorqueAccelerometerDataset& ForceTorqueAccelerometerDataset::operator=(const ForceTorqueAccelerometerDataset &other) {
     if(this != &other) {
         *pimpl = *(other.pimpl);
     }
     return *this;
 }
- 
+
 
 ForceTorqueAccelerometerDataset::~ForceTorqueAccelerometerDataset()
 {
@@ -64,7 +64,7 @@ void ForceTorqueAccelerometerDataset::reset()
 int ForceTorqueAccelerometerDataset::getNrOfSamples() const
 {
     return (int)this->pimpl->samples.size();
-}  
+}
 
 
 bool ForceTorqueAccelerometerDataset::addMeasurements(const VecWrapper _ft_measure,
@@ -73,9 +73,9 @@ bool ForceTorqueAccelerometerDataset::addMeasurements(const VecWrapper _ft_measu
     ForceTorqueAccelerometerMeasurement sample;
     sample.ft_measure = toEigen(_ft_measure);
     sample.acc_measure = toEigen(_acc_measure);
-    
+
     this->pimpl->samples.push_back(sample);
-    
+
     return true;
 }
 
@@ -87,12 +87,12 @@ bool ForceTorqueAccelerometerDataset::getMeasurements(const int sample,
     {
         return false;
     }
-    
+
     toEigen(ft_measure) = this->pimpl->samples[sample].ft_measure;
-    toEigen(acc_measure) = this->pimpl->samples[sample].acc_measure;   
+    toEigen(acc_measure) = this->pimpl->samples[sample].acc_measure;
     return true;
 }
-    
+
 
 
 

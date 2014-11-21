@@ -14,6 +14,7 @@ set(${library_target_name}_HDRS
     force_calibration_matrix_estimator.h
     wrappers.h
     eigen_wrappers.h
+    yarp_wrappers.h
 )
 
 set(library_export_header_name ${library_target_name}-export.h)

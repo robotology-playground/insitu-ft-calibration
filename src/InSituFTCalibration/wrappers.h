@@ -3,14 +3,16 @@
 
 #include <cstdlib>
 
+#include "insitu-ft-calibration-export.h"
+
 namespace InSituFTCalibration {
-   
+
 /**
  * Structure representing an array of double elements.
- * It holds a pointer to the raw area of memory where the 
+ * It holds a pointer to the raw area of memory where the
  * first elements of the array is, and some additional information
- * to permit a basic form of error checking. 
- * 
+ * to permit a basic form of error checking.
+ *
  */
 struct INSITU_FT_CALIBRATION_EXPORT VecWrapper
 {
@@ -20,14 +22,14 @@ struct INSITU_FT_CALIBRATION_EXPORT VecWrapper
 
 enum StorageOrder { ROW_MAJOR,
                     COLUMN_MAJOR };
-    
+
 /**
  * Structure representing a 2D array (matrix)
  * of double elements.
- * It holds a pointer to the raw area of memory where the 
+ * It holds a pointer to the raw area of memory where the
  * first elements of the array is, and some additional information
  * to permit a basic form of error checking and interpretation of the data.
- */ 
+ */
 struct INSITU_FT_CALIBRATION_EXPORT MatWrapper
 {
     double * data;

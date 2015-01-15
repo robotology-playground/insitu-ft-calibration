@@ -183,7 +183,19 @@ bool ForceCalibrationMatrixEstimator::computeForceCalibrationMatrixEstimation(st
                                     added_mass,
                                     dummy);
 
-        p_dataset->computeOffsetEstimation();
+        bool ret = p_dataset->computeOffsetEstimation();
+
+        if( !ret )
+        {
+            std::cout << "[ERR] computeOffsetEstimation() failed for dataset " << dummy << std::endl;
+        }
+
+#ifndef NDEBUG
+        Eigen::Matrix<double,6,1> estimated_offset;
+        std::cerr << "[DEBUG] Offset estimated for dataset: " << dummy << std::endl;
+        p_dataset->getEstimatedOffset(wrapVec(estimated_offset));
+        std::cerr << "[DEBUG] " << estimated_offset << std::endl;
+#endif
 
         for(int smpl=0; smpl < p_dataset->getNrOfSamples(); smpl++ )
         {
@@ -227,8 +239,7 @@ bool ForceCalibrationMatrixEstimator::computeForceCalibrationMatrixEstimation(st
 bool ForceCalibrationMatrixEstimator::getEstimatedForceCalibrationMatrix(const MatWrapper _estimated_calibration_matrix)
 {
     if( _estimated_calibration_matrix.rows != CalibrationOutputs ||
-        _estimated_calibration_matrix.cols != CalibrationInputs ||
-        _estimated_calibration_matrix.storage_order != COLUMN_MAJOR )
+        _estimated_calibration_matrix.cols != CalibrationInputs )
     {
         std::cerr << "[ERR] mismatch in _estimated_calibration_matrix parameter of getEstimatedForceCalibrationMatrix method" << std::endl;
         return false;

@@ -221,9 +221,9 @@ bool ForceCalibrationMatrixEstimator::computeForceCalibrationMatrixEstimation(st
 
     x = svd_TTT.solve(ThetaTransposeBeta);
 
-    std::cout << "[INFO] svd problems singular value " << svd_TTT.singularValues() << std::endl;
-    std::cout << "[INFO] TTT " << std::endl << ThetaTransposeTheta << std::endl;
-    std::cout << "[INFO] estimated mass " << x.segment<1>(CalibrationInputs*CalibrationOutputs) << std::endl;
+    //std::cout << "[INFO] svd problems singular value " << svd_TTT.singularValues() << std::endl;
+    //std::cout << "[INFO] TTT " << std::endl << ThetaTransposeTheta << std::endl;
+    //std::cout << "[INFO] estimated mass " << x.segment<1>(CalibrationInputs*CalibrationOutputs) << std::endl;
 
     for(int i=0; i < CalibrationOutputs; i++ )
     {
